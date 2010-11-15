@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="true">
+  <TopNode>[0-1000]C:\Projects\noisymouse\source\Tests\Tests.nunit</TopNode>
+  <SelectedNode>[0-1027]Tests.CameraInfoTests</SelectedNode>
+  <ExcludeCategories>false</ExcludeCategories>
+  <Nodes>
+    <Node UniqueName="[0-1000]C:\Projects\noisymouse\source\Tests\Tests.nunit" Expanded="true">
+      <Nodes>
+        <Node UniqueName="[0-1035]C:\Projects\noisymouse\source\Tests\bin\Debug\Tests.dll" Expanded="true">
+          <Nodes>
+            <Node UniqueName="[0-1036]Tests" Expanded="true" Checked="true">
+              <Nodes>
+                <Node UniqueName="[0-1027]Tests.CameraInfoTests">
+                  <Nodes>
+                    <Node UniqueName="[0-1031]Tests.CameraInfoTests.AvailableAperturesTest" />
+                    <Node UniqueName="[0-1032]Tests.CameraInfoTests.AvailableExposalsTest" />
+                    <Node UniqueName="[0-1033]Tests.CameraInfoTests.AvailableImageQualitiesTest" />
+                    <Node UniqueName="[0-1030]Tests.CameraInfoTests.AvailableIsoSpeedsTest" />
+                    <Node UniqueName="[0-1028]Tests.CameraInfoTests.DisplayStringTest" />
+                    <Node UniqueName="[0-1034]Tests.CameraInfoTests.EnumFieldsTest" />
+                    <Node UniqueName="[0-1029]Tests.CameraInfoTests.TextFieldsTest" />
+                  </Nodes>
+                </Node>
+                <Node UniqueName="[0-1013]Tests.CameraProcessorTests">
+                  <Nodes>
+                    <Node UniqueName="[0-1015]Tests.CameraProcessorTests.CatchShootExceptionTest" />
+                    <Node UniqueName="[0-1017]Tests.CameraProcessorTests.CreateApertureBracketingTest" />
+                    <Node UniqueName="[0-1016]Tests.CameraProcessorTests.CreateExposalBracketingTest" />
+                    <Node UniqueName="[0-1018]Tests.CameraProcessorTests.DisposeTest" />
+                    <Node UniqueName="[0-1014]Tests.CameraProcessorTests.MakeAShootTest" />
+                  </Nodes>
+                </Node>
+                <Node UniqueName="[0-1019]Tests.EnumTests">
+                  <Nodes>
+                    <Node UniqueName="[0-1025]Tests.EnumTests.ApplyTest" />
+                    <Node UniqueName="[0-1024]Tests.EnumTests.EqualityTest" />
+                    <Node UniqueName="[0-1021]Tests.EnumTests.GetApertureAvailableValuesTest" />
+                    <Node UniqueName="[0-1026]Tests.EnumTests.GetAvailableValuesTest" />
+                    <Node UniqueName="[0-1022]Tests.EnumTests.GetExposalAvailableValuesTest" />
+                    <Node UniqueName="[0-1020]Tests.EnumTests.GetIsoAvailableValuesTest" />
+                    <Node UniqueName="[0-1023]Tests.EnumTests.ToStringTest" />
+                  </Nodes>
+                </Node>
+                <Node UniqueName="[0-1001]Tests.ImageTests">
+                  <Nodes>
+                    <Node UniqueName="[0-1004]Tests.ImageTests.CameraDisplayStringTest" />
+                    <Node UniqueName="[0-1002]Tests.ImageTests.MakeTest" />
+                    <Node UniqueName="[0-1003]Tests.ImageTests.ToStringTest" />
+                  </Nodes>
+                </Node>
+                <Node UniqueName="[0-1005]Tests.SaveToFolderImageFileHandlerTests">
+                  <Nodes>
+                    <Node UniqueName="[0-1006]Tests.SaveToFolderImageFileHandlerTests.TestSaveFile" />
+                    <Node UniqueName="[0-1007]Tests.SaveToFolderImageFileHandlerTests.ToStringTest" />
+                  </Nodes>
+                </Node>
+                <Node UniqueName="[0-1008]Tests.ShootParametersTests">
+                  <Nodes>
+                    <Node UniqueName="[0-1012]Tests.ShootParametersTests.ApplyToTest" />
+                    <Node UniqueName="[0-1011]Tests.ShootParametersTests.EmptyToStringTest" />
+                    <Node UniqueName="[0-1009]Tests.ShootParametersTests.EqualityTest" />
+                    <Node UniqueName="[0-1010]Tests.ShootParametersTests.ToStringTest" />
+                  </Nodes>
+                </Node>
+              </Nodes>
+            </Node>
+          </Nodes>
+        </Node>
+      </Nodes>
+    </Node>
+  </Nodes>
+</VisualState>
