@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using EDSDKLib;
 
 namespace Source
 {
     public class LiveViewThread
     {
-        private CameraInfo _cameraInfo;
-        private CameraPool _cameraPool;
+        private ICameraPool _cameraPool;
+        private ICameraInfo _cameraInfo;
         private bool _isRunning;
         private Thread _thread;
         private object _syncObject;
+        private Action<IntPtr, uint> _onImageRecieved;
 
-        public LiveViewThread(CameraInfo cameraInfo, CameraPool cameraPool)
+        public LiveViewThread(ICameraPool cameraPool, Action<IntPtr, uint> onImageRecieved)
         {
-            _cameraInfo = cameraInfo;
             _cameraPool = cameraPool;
+            _onImageRecieved = onImageRecieved;
+            _cameraInfo = null;
             _isRunning = false;
             _thread = new Thread(Worker);
             _syncObject = new object();
@@ -33,16 +36,33 @@ namespace Source
 
         protected void LoopFunction()
         {
-            // TODO: do the magic
+            _cameraPool.DownloadLiveViewImage(_cameraInfo, _onImageRecieved);
         }
 
-        public void Start()
+        public void Start(ICameraInfo cameraInfo)
         {
+            _cameraInfo = cameraInfo;
+            _cameraPool.StartLiveView(_cameraInfo, StartWorkerThread);
+        }
 
+        private void StartWorkerThread(uint value)
+        {
+            lock (_syncObject)
+            {
+                _isRunning = true;
+                _thread.Start();
+            }
         }
 
         public void Stop()
         {
+            lock (_syncObject)
+            {
+                _isRunning = false;
+                _thread.Join();
+                _cameraPool.StopLiveView(_cameraInfo);
+                _cameraInfo = null;
+            }
         }
     }
 }

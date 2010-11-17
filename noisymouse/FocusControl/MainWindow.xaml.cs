@@ -54,7 +54,7 @@ namespace FocusControl
             {
                 ICameraInfo cameraInfo = (ICameraInfo)o;
                 _cameraPool.LockUI(cameraInfo);
-                _cameraPool.MoveFocus(cameraInfo.Id, howMuch);
+                _cameraPool.MoveFocus(cameraInfo, howMuch);
                 _cameraPool.UnlockUI(cameraInfo);
             }
         }
@@ -109,7 +109,7 @@ namespace FocusControl
                 ICameraInfo cameraInfo = (ICameraInfo)o;
 
                 //_cameraPool.LockUI(cameraInfo);
-                _cameraPool.StartLiveView(cameraInfo.Id, null);
+                _cameraPool.StartLiveView(cameraInfo, null);
                 //camera.SendCommand((uint)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_Completely);
             }
         }

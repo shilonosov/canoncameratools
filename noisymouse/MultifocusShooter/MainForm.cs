@@ -12,12 +12,15 @@ using Source.Utils;
 using EDSDKLib;
 using System.Windows.Threading;
 using System.Threading;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace MultifocusShooter
 {
     public partial class MainForm : Form, ICameraNotifications, IImageHandler
     {
         private readonly ICameraPool _cameraPool;
+        private readonly LiveViewThread _liveViewThread;
 
         private ICameraInfo CameraInfo
         {
@@ -32,11 +35,22 @@ namespace MultifocusShooter
             InitializeComponent();
 
             _cameraPool = new CameraPool(this, Dispatcher.CurrentDispatcher);
+            _liveViewThread = new LiveViewThread(_cameraPool, OnImageRecieved);
+        }
+
+        protected void OnImageRecieved(IntPtr imagePointer, uint size)
+        {
+            Byte[] data = new byte[size];
+            Marshal.Copy(imagePointer, data, 0, (int)size);
+            MemoryStream memStream = new MemoryStream(data);
+
+            pictureBox.Image = new Bitmap(memStream);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             cameraInfoBindingSource.DataSource = _cameraPool.CameraList;
+            _liveViewThread.Start(CameraInfo);
         }
 
         public void ShuttedDown()
@@ -50,6 +64,7 @@ namespace MultifocusShooter
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            _liveViewThread.Stop();
             Settings.Default.Save();
         }
 
@@ -76,7 +91,7 @@ namespace MultifocusShooter
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _cameraPool.StartLiveView(CameraInfo.Id, Shoot);
+            _cameraPool.StartLiveView(CameraInfo, Shoot);
         }
 
         private uint GetSpeed()
@@ -113,7 +128,7 @@ namespace MultifocusShooter
                     steps--;
                 }
 
-                _cameraPool.StopLiveView(CameraInfo.Id);
+                _cameraPool.StopLiveView(CameraInfo);
             }));
         }
 
@@ -121,7 +136,7 @@ namespace MultifocusShooter
         {
             for (int j = 0; j < multiplierNumericUpDown.Value; ++j)
             {
-                _cameraPool.MoveFocus(CurrentImage.CameraInfo.Id, this.GetSpeed());
+                _cameraPool.MoveFocus(CurrentImage.CameraInfo, this.GetSpeed());
             }
         }
 
