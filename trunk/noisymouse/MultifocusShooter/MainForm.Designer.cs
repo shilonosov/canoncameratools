@@ -33,6 +33,8 @@
             this.cameraInfoListBox = new System.Windows.Forms.ListBox();
             this.cameraInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.pauseNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.multiplierNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.stepsNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -46,18 +48,18 @@
             this.backwardRadioButton = new System.Windows.Forms.RadioButton();
             this.forwardRadioButton = new System.Windows.Forms.RadioButton();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.pauseNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
             this.logTichTextBox = new System.Windows.Forms.RichTextBox();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cameraInfoBindingSource)).BeginInit();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pauseNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.multiplierNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepsNumericUpDown)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pauseNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -97,6 +99,37 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Parameters";
+            // 
+            // pauseNumericUpDown
+            // 
+            this.pauseNumericUpDown.Location = new System.Drawing.Point(71, 66);
+            this.pauseNumericUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.pauseNumericUpDown.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.pauseNumericUpDown.Name = "pauseNumericUpDown";
+            this.pauseNumericUpDown.Size = new System.Drawing.Size(53, 20);
+            this.pauseNumericUpDown.TabIndex = 6;
+            this.pauseNumericUpDown.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Pause (ms)";
             // 
             // multiplierNumericUpDown
             // 
@@ -247,37 +280,6 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Preview";
             // 
-            // pauseNumericUpDown
-            // 
-            this.pauseNumericUpDown.Location = new System.Drawing.Point(71, 66);
-            this.pauseNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.pauseNumericUpDown.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.pauseNumericUpDown.Name = "pauseNumericUpDown";
-            this.pauseNumericUpDown.Size = new System.Drawing.Size(53, 20);
-            this.pauseNumericUpDown.TabIndex = 6;
-            this.pauseNumericUpDown.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 68);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Pause (ms)";
-            // 
             // logTichTextBox
             // 
             this.logTichTextBox.Location = new System.Drawing.Point(6, 19);
@@ -286,11 +288,20 @@
             this.logTichTextBox.TabIndex = 0;
             this.logTichTextBox.Text = "";
             // 
+            // pictureBox
+            // 
+            this.pictureBox.Location = new System.Drawing.Point(12, 255);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(320, 240);
+            this.pictureBox.TabIndex = 8;
+            this.pictureBox.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(911, 255);
+            this.ClientSize = new System.Drawing.Size(903, 502);
+            this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -308,6 +319,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.cameraInfoBindingSource)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pauseNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.multiplierNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stepsNumericUpDown)).EndInit();
             this.groupBox3.ResumeLayout(false);
@@ -315,7 +327,7 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pauseNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -342,6 +354,7 @@
         private System.Windows.Forms.NumericUpDown pauseNumericUpDown;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RichTextBox logTichTextBox;
+        private System.Windows.Forms.PictureBox pictureBox;
 
     }
 }

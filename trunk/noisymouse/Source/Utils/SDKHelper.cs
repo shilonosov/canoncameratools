@@ -19,6 +19,10 @@ namespace Source
     {
     }
 
+    public class SDKComeBackLaterException : SDKException
+    {
+    }
+
     public class ShootingException : SDKException
     {
         private static readonly Dictionary<uint, string> _errors = new Dictionary<uint, string>();
@@ -48,6 +52,10 @@ namespace Source
     {
         public static void CheckError(uint aErrorCode)
         {
+            if (aErrorCode == EDSDK.EDS_ERR_OBJECT_NOTREADY)
+            {
+                throw new SDKComeBackLaterException();
+            }
             if (aErrorCode == EDSDK.EDS_ERR_INVALID_PARAMETER)
             {
                 throw new SDKInvalidParameterExeption();

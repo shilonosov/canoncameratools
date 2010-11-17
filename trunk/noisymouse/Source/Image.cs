@@ -43,13 +43,13 @@ namespace Source
         public void Make(ICameraPool aPool)
         {
             //aPool.GetCamera(_cameraInfo.Id).MakeAShoot(_parameters, _handler);
-            aPool.TakeAPicture(_cameraInfo.Id, _parameters, _handler);
+            aPool.TakeAPicture(_cameraInfo, _parameters, _handler);
         }
 
         public void PressShutterButton(ICameraPool aPool)
         {
             //aPool.GetCamera(_cameraInfo.Id).Camera.PressShutterButton(_handler);
-            aPool.PressShutterButton(_cameraInfo.Id, _handler);
+            aPool.PressShutterButton(_cameraInfo, _handler);
         }
     }
 }

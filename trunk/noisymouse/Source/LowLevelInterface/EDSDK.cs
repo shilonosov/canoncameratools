@@ -1880,7 +1880,7 @@ namespace EDSDKLib
 		//
 		//  Returns:    Any of the sdk errors.
 		-----------------------------------------------------------------------------*/
-		[DllImport("EDSDK.dll")]
+		[DllImport("EDSDK.dll", CallingConvention=CallingConvention.Cdecl)]
 		public extern static uint EdsCreateEvfImageRef(IntPtr inStreamRef, out IntPtr outEvfImageRef);
 
 
@@ -1903,7 +1903,7 @@ namespace EDSDKLib
 		//
 		//  Returns:    Any of the sdk errors.
 		-----------------------------------------------------------------------------*/
-		[DllImport("EDSDK.dll")]
+        [DllImport("EDSDK.dll", CallingConvention = CallingConvention.Cdecl)]
 		public extern static uint EdsDownloadEvfImage(IntPtr inCameraRef, IntPtr outEvfImageRef);   
 
         #endregion

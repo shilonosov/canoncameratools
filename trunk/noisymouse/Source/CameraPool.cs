@@ -11,19 +11,21 @@ namespace Source
         void RefreshList();
         ICameraInfo[] CameraList { get; }
 
-        void TakeAPicture(string cameraId, IShootParameters _shootingParameters, IImageHandler _imageHandler);
-        void PressShutterButton(string cameraId, IImageHandler _imageHandler);
+        void TakeAPicture(ICameraInfo cameraInfo, IShootParameters _shootingParameters, IImageHandler _imageHandler);
+        void PressShutterButton(ICameraInfo cameraInfo, IImageHandler _imageHandler);
 
-        void StartLiveView(string cameraId, Action<uint> onSwitched);
-        void MoveFocus(string cameraId, uint value);
-        void StopLiveView(string cameraId);
+        void StartLiveView(ICameraInfo cameraInfo, Action<uint> onSwitched);
+        void MoveFocus(ICameraInfo cameraInfo, uint value);
+        void StopLiveView(ICameraInfo cameraInfo);
 
         void LockUI(ICameraInfo cameraInfo);
         void UnlockUI(ICameraInfo cameraInfo);
 
         void SetVideoMode(ICameraInfo cameraInfo);
 
-        void SetFlashMode(ICameraInfo CameraInfo, int p);
+        void SetFlashMode(ICameraInfo cameraInfo, int mode);
+
+        void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<IntPtr, uint> onImageRecieved);
     }
 
     public class CameraPool: ICameraPool
@@ -60,9 +62,9 @@ namespace Source
             UnInitialize();
         }
 
-        protected ICameraProcessor GetCamera(string anId)
+        protected ICameraProcessor GetCamera(ICameraInfo cameraInfo)
         {
-            return _processors.Values.ToArray().Single(processor => processor.CameraInfo.Id == anId);
+            return _processors.Values.ToArray().Single(processor => processor.CameraInfo.Id == cameraInfo.Id);
         }
 
         public void RefreshList()
@@ -115,54 +117,58 @@ namespace Source
         }
 
 
-        public void TakeAPicture(string cameraId, IShootParameters shootingParameters, IImageHandler imageHandler)
+        public void TakeAPicture(ICameraInfo cameraInfo, IShootParameters shootingParameters, IImageHandler imageHandler)
         {
             _dispatcher.BeginInvoke((Action)(() =>
             {
-                GetCamera(cameraId).TakeAPicture(shootingParameters, imageHandler);
+                GetCamera(cameraInfo).TakeAPicture(shootingParameters, imageHandler);
             }));
         }
 
-        public void PressShutterButton(string cameraId, IImageHandler imageHandler)
+        public void PressShutterButton(ICameraInfo cameraInfo, IImageHandler imageHandler)
         {
-            GetCamera(cameraId).PressShutterButton(imageHandler);
+            GetCamera(cameraInfo).PressShutterButton(imageHandler);
         }
 
-        public void StartLiveView(string cameraId, Action<uint> onSwitched)
+        public void StartLiveView(ICameraInfo cameraInfo, Action<uint> onSwitched)
         {
-            GetCamera(cameraId).Camera.StartLiveView(onSwitched);
+            GetCamera(cameraInfo).Camera.StartLiveView(onSwitched);
         }
 
-        public void MoveFocus(string cameraId, uint value)
+        public void MoveFocus(ICameraInfo cameraInfo, uint value)
         {
-            GetCamera(cameraId).Camera.MoveFocus(value);
+            GetCamera(cameraInfo).Camera.MoveFocus(value);
         }
 
-        public void StopLiveView(string cameraId)
+        public void StopLiveView(ICameraInfo cameraInfo)
         {
-            GetCamera(cameraId).Camera.StopLiveView();
+            GetCamera(cameraInfo).Camera.StopLiveView();
         }
 
 
         public void LockUI(ICameraInfo cameraInfo)
         {
-            GetCamera(cameraInfo.Id).Camera.LockUI();
+            GetCamera(cameraInfo).Camera.LockUI();
         }
 
         public void UnlockUI(ICameraInfo cameraInfo)
         {
-            GetCamera(cameraInfo.Id).Camera.UnlockUI();
+            GetCamera(cameraInfo).Camera.UnlockUI();
         }
 
         public void SetVideoMode(ICameraInfo cameraInfo)
         {
-            GetCamera(cameraInfo.Id).Camera.SetProperty(EDSDK.PropID_DriveMode, 2);
+            GetCamera(cameraInfo).Camera.SetProperty(EDSDK.PropID_DriveMode, 2);
         }
-
 
         public void SetFlashMode(ICameraInfo cameraInfo, int mode)
         {
-            GetCamera(cameraInfo.Id).Camera.SetProperty(EDSDK.PropID_FlashMode, mode);
+            GetCamera(cameraInfo).Camera.SetProperty(EDSDK.PropID_FlashMode, mode);
+        }
+
+        public void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<IntPtr, uint> onImageRecieved)
+        {
+            GetCamera(cameraInfo).Camera.DownloadLiveViewImage(onImageRecieved);
         }
     }
 }

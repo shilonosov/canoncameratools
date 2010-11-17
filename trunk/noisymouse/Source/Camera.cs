@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Linq;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using EDSDKLib;
 using Source.Utils;
-using System.Collections.Generic;
-using System.Data.Linq;
 
 
 namespace Source
@@ -52,6 +52,8 @@ namespace Source
         void StartLiveView(Action<uint> whenReady);
         void StopLiveView();
         void MoveFocus(uint value);
+
+        void DownloadLiveViewImage(Action<IntPtr, uint> onImageRecieved);
     }
 
     public class CameraEvent
@@ -79,6 +81,9 @@ namespace Source
 
     public class Camera : ICamera
     {
+        public const int BUFFER_SIZE = 2 * 1024 * 1024;
+
+
         private static readonly object _synchronizationObject = new object();
         private static readonly object _eventHandlersSync = new object();
 
@@ -423,6 +428,33 @@ namespace Source
             }
 
             return EDSDK.EDS_ERR_OK;
+        }
+
+
+        public void DownloadLiveViewImage(Action<IntPtr, uint> onImageRecieved)
+        {
+            IntPtr stream = IntPtr.Zero;
+            IntPtr image = IntPtr.Zero;
+            IntPtr pointer = IntPtr.Zero;
+            uint size = 0;
+
+            try
+            {
+                SDKHelper.CheckError(EDSDK.EdsCreateMemoryStream(BUFFER_SIZE, out stream));
+                SDKHelper.CheckError(EDSDK.EdsCreateEvfImageRef(stream, out image));
+                SDKHelper.CheckError(EDSDK.EdsDownloadEvfImage(_pointer, image));
+
+                SDKHelper.CheckError(EDSDK.EdsGetPointer(stream, out pointer));
+                SDKHelper.CheckError(EDSDK.EdsGetLength(stream, out size));
+
+                onImageRecieved(pointer, size);
+
+                SDKHelper.CheckError(EDSDK.EdsRelease(image));
+                SDKHelper.CheckError(EDSDK.EdsRelease(stream));
+            }
+            catch (SDKComeBackLaterException)
+            {
+            }
         }
     }
 }
