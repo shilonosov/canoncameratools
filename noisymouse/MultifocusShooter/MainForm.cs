@@ -44,7 +44,11 @@ namespace MultifocusShooter
             Marshal.Copy(imagePointer, data, 0, (int)size);
             MemoryStream memStream = new MemoryStream(data);
 
-            pictureBox.Image = new Bitmap(memStream);
+
+            Bitmap bitmap = new Bitmap(memStream);
+            Bitmap resized = new Bitmap(bitmap, pictureBox.Size);
+
+            pictureBox.Image = resized;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
