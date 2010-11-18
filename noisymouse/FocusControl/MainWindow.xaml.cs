@@ -53,9 +53,7 @@ namespace FocusControl
             foreach (Object o in listBox1.ItemsSource)
             {
                 ICameraInfo cameraInfo = (ICameraInfo)o;
-                _cameraPool.LockUI(cameraInfo);
                 _cameraPool.MoveFocus(cameraInfo, howMuch);
-                _cameraPool.UnlockUI(cameraInfo);
             }
         }
 
@@ -89,56 +87,22 @@ namespace FocusControl
             MoveFocus(EDSDK.EvfDriveLens_Near1);
         }
 
-        private void button7_Click(object sender, RoutedEventArgs e)
-        {
-            if (_isRecording)
-            {
-                StopRecording();
-            }
-            else
-            {
-                StartRecordging();
-            }
-            _isRecording = !_isRecording;
-        }
-
-        private void StartRecordging()
-        {
-            foreach (Object o in listBox1.ItemsSource)
-            {
-                ICameraInfo cameraInfo = (ICameraInfo)o;
-
-                //_cameraPool.LockUI(cameraInfo);
-                _cameraPool.StartLiveView(cameraInfo, null);
-                //camera.SendCommand((uint)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_Completely);
-            }
-        }
-
-        private void StopRecording()
-        {
-            foreach (Object o in listBox1.ItemsSource)
-            {
-                ICameraInfo cameraInfo = (ICameraInfo)o;
-
-                //_cameraPool.UnlockUI(cameraInfo);
-            }
-        }
-
-
         public void ImageRecieved(ImageFile imageFile)
         {
-            throw new NotImplementedException();
         }
 
         public void CameraDone()
         {
-            throw new NotImplementedException();
         }
 
 
         public void Log(string message)
         {
-            throw new NotImplementedException();
+        }
+
+        private void buttonAttach_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
