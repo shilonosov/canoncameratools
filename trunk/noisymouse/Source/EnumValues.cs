@@ -173,7 +173,7 @@ namespace Source
             t1_8000 = 0xA0
     }
 
-    public enum SaveToEnum
+    public enum SaveToEnum : uint
     {
             Save_on_a_memory_card_of_a_remote_camera = 1,
             Save_by_downloading_to_a_host_computer = 2,
