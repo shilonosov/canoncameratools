@@ -26,6 +26,9 @@ namespace Source
         void SetFlashMode(ICameraInfo cameraInfo, int mode);
 
         void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<IntPtr, uint> onImageRecieved);
+
+        void StartListenTakeImage(ICameraInfo cameraInfo, IImageHandler imageHandler);
+        void StopListenTakeImage(ICameraInfo cameraInfo);
     }
 
     public class CameraPool: ICameraPool
@@ -169,6 +172,21 @@ namespace Source
         public void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<IntPtr, uint> onImageRecieved)
         {
             GetCamera(cameraInfo).Camera.DownloadLiveViewImage(onImageRecieved);
+        }
+
+
+        public void StartListenTakeImage(ICameraInfo cameraInfo, IImageHandler imageHandler)
+        {
+            ICamera camera = GetCamera(cameraInfo).Camera;
+            camera.SaveToValue = (uint)SaveToEnum.Save_by_downloading_to_a_host_computer;
+            camera.SetDownloadImageHandler(imageHandler);
+        }
+
+        public void StopListenTakeImage(ICameraInfo cameraInfo)
+        {
+            ICamera camera = GetCamera(cameraInfo).Camera;
+            camera.SaveToValue = (uint)SaveToEnum.Save_on_a_memory_card_of_a_remote_camera;
+            camera.SetDownloadImageHandler(null);
         }
     }
 }

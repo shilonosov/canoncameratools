@@ -54,6 +54,7 @@ namespace Source
         void MoveFocus(uint value);
 
         void DownloadLiveViewImage(Action<IntPtr, uint> onImageRecieved);
+        void SetDownloadImageHandler(IImageHandler imageHandler);
     }
 
     public class CameraEvent
@@ -156,21 +157,7 @@ namespace Source
 
         public uint SaveToValue
         {
-            set
-            {
-                SetProperty(EDSDK.PropID_SaveTo, value);
-
-                if ((value == (uint)SaveToEnum.Save_by_downloading_to_a_host_computer) || (value == (uint)SaveToEnum.Save_both_ways) )
-                {
-                    EDSDK.EdsCapacity capacity = new EDSDK.EdsCapacity();
-                    capacity.BytesPerSector = 1000;
-                    capacity.NumberOfFreeClusters = 10000;
-                    capacity.Reset = 1;
-
-                    SDKHelper.CheckError(EDSDK.EdsSetCapacity(_pointer, capacity));
-                }
-
-            }
+            set { SetProperty(EDSDK.PropID_SaveTo, value); }
         }
 
         public void Dispose()
@@ -248,7 +235,6 @@ namespace Source
                         if (_imageHandler != null)
                         {
                             _imageHandler.Handle(GetImageFile(inRef, _folder));
-                            _imageHandler = null;
                         }
                         _cameraNotifications.CameraDone();
                     }
@@ -455,6 +441,11 @@ namespace Source
             catch (SDKComeBackLaterException)
             {
             }
+        }
+
+        public void SetDownloadImageHandler(IImageHandler imageHandler)
+        {
+            _imageHandler = imageHandler;
         }
     }
 }

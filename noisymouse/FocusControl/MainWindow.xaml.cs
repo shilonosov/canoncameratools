@@ -13,30 +13,69 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Source;
 using EDSDKLib;
+using System.ComponentModel;
 
 namespace FocusControl
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, ICameraNotifications
+    public partial class MainWindow : Window, ICameraNotifications, INotifyPropertyChanged
     {
         private CameraPool _cameraPool;
-        private bool _isRecording = false;
+        private ICameraInfo _selectedCamera;
+        private bool _isInLiveView;
+        private LiveViewThread _lvThread;
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+
+        #endregion
+
+        public bool IsInLiveView
+        {
+            get { return _isInLiveView; }
+            set
+            {
+                _isInLiveView = value;
+                NotifyPropertyChanged("IsInLiveView");
+            }
+        }
+
+        public ICameraInfo[] CameraList
+        {
+            get
+            {
+                return _cameraPool.CameraList;
+            }
+        }
+
+        public ICameraInfo SelectedCamera
+        {
+            set
+            {
+                _selectedCamera = value;
+                NotifyPropertyChanged("SelectedCamera");
+            }
+            get
+            {
+                return _selectedCamera;
+            }
+        }
 
         public MainWindow()
         {
-            InitializeComponent();
             _cameraPool = new CameraPool(this, Dispatcher);
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            listBox1.ItemsSource = _cameraPool.CameraList;
-            foreach (ICameraInfo camera in _cameraPool.CameraList)
-            {
-                listBox1.Items.Add(camera);
-            }
+            _lvThread = new LiveViewThread(_cameraPool, OnImageRecieved);
+            InitializeComponent();
+            NotifyPropertyChanged("IsInLiveView");
         }
 
         public void ShuttedDown()
@@ -102,7 +141,23 @@ namespace FocusControl
 
         private void buttonAttach_Click(object sender, RoutedEventArgs e)
         {
+            IsInLiveView = true;
 
+        }
+
+        private void buttonRelease_Click(object sender, RoutedEventArgs e)
+        {
+            IsInLiveView = false;
+        }
+
+        private void OnImageRecieved(IntPtr pointer, uint size)
+        {
+        }
+
+        private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _lvThread.Stop();
+            _lvThread.Start(SelectedCamera);
         }
     }
 }

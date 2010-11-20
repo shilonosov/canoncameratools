@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultifocusShooter", "Multif
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonUI", "CommonUI\CommonUI.csproj", "{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalStorage", "ExternalStorage\ExternalStorage.csproj", "{854917EC-C9E2-4D9C-A1D5-B3646690D403}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,11 +86,22 @@ Global
 		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Debug|x86.ActiveCfg = Debug|x86
+		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Debug|x86.Build.0 = Debug|x86
 		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F581DEDF-414F-435E-AC49-E65C1F5DB5B4}.Release|x86.ActiveCfg = Release|Any CPU
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Debug|x86.ActiveCfg = Debug|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Debug|x86.Build.0 = Debug|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Release|Any CPU.ActiveCfg = Release|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Release|Mixed Platforms.Build.0 = Release|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Release|x86.ActiveCfg = Release|x86
+		{854917EC-C9E2-4D9C-A1D5-B3646690D403}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
