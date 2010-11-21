@@ -65,7 +65,7 @@ namespace Source
             UnInitialize();
         }
 
-        protected ICameraProcessor GetCamera(ICameraInfo cameraInfo)
+        protected ICameraProcessor GetCameraProcessor(ICameraInfo cameraInfo)
         {
             return _processors.Values.ToArray().Single(processor => processor.CameraInfo.Id == cameraInfo.Id);
         }
@@ -124,67 +124,70 @@ namespace Source
         {
             _dispatcher.BeginInvoke((Action)(() =>
             {
-                GetCamera(cameraInfo).TakeAPicture(shootingParameters, imageHandler);
+                GetCameraProcessor(cameraInfo).TakeAPicture(shootingParameters, imageHandler);
             }));
         }
 
         public void PressShutterButton(ICameraInfo cameraInfo, IImageHandler imageHandler)
         {
-            GetCamera(cameraInfo).PressShutterButton(imageHandler);
+            GetCameraProcessor(cameraInfo).PressShutterButton(imageHandler);
         }
 
         public void StartLiveView(ICameraInfo cameraInfo, Action<uint> onSwitched)
         {
-            GetCamera(cameraInfo).Camera.StartLiveView(onSwitched);
+            GetCameraProcessor(cameraInfo).Camera.StartLiveView(onSwitched);
         }
 
         public void MoveFocus(ICameraInfo cameraInfo, uint value)
         {
-            GetCamera(cameraInfo).Camera.MoveFocus(value);
+            _dispatcher.BeginInvoke((Action)(() =>
+            {
+                GetCameraProcessor(cameraInfo).Camera.MoveFocus(value);
+            }));
         }
 
         public void StopLiveView(ICameraInfo cameraInfo)
         {
-            GetCamera(cameraInfo).Camera.StopLiveView();
+            GetCameraProcessor(cameraInfo).Camera.StopLiveView();
         }
 
 
         public void LockUI(ICameraInfo cameraInfo)
         {
-            GetCamera(cameraInfo).Camera.LockUI();
+            GetCameraProcessor(cameraInfo).Camera.LockUI();
         }
 
         public void UnlockUI(ICameraInfo cameraInfo)
         {
-            GetCamera(cameraInfo).Camera.UnlockUI();
+            GetCameraProcessor(cameraInfo).Camera.UnlockUI();
         }
 
         public void SetVideoMode(ICameraInfo cameraInfo)
         {
-            GetCamera(cameraInfo).Camera.SetProperty(EDSDK.PropID_DriveMode, 2);
+            GetCameraProcessor(cameraInfo).Camera.SetProperty(EDSDK.PropID_DriveMode, 2);
         }
 
         public void SetFlashMode(ICameraInfo cameraInfo, int mode)
         {
-            GetCamera(cameraInfo).Camera.SetProperty(EDSDK.PropID_FlashMode, mode);
+            GetCameraProcessor(cameraInfo).Camera.SetProperty(EDSDK.PropID_FlashMode, mode);
         }
 
         public void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<IntPtr, uint> onImageRecieved)
         {
-            GetCamera(cameraInfo).Camera.DownloadLiveViewImage(onImageRecieved);
+            GetCameraProcessor(cameraInfo).Camera.DownloadLiveViewImage(onImageRecieved);
         }
 
 
         public void StartListenTakeImage(ICameraInfo cameraInfo, IImageHandler imageHandler)
         {
-            ICamera camera = GetCamera(cameraInfo).Camera;
+            ICamera camera = GetCameraProcessor(cameraInfo).Camera;
             camera.SaveToValue = (uint)SaveToEnum.Save_by_downloading_to_a_host_computer;
             camera.SetDownloadImageHandler(imageHandler);
         }
 
         public void StopListenTakeImage(ICameraInfo cameraInfo)
         {
-            ICamera camera = GetCamera(cameraInfo).Camera;
+            ICamera camera = GetCameraProcessor(cameraInfo).Camera;
             camera.SaveToValue = (uint)SaveToEnum.Save_on_a_memory_card_of_a_remote_camera;
             camera.SetDownloadImageHandler(null);
         }

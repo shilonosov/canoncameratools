@@ -58,11 +58,32 @@ namespace Source
         {
             lock (_syncObject)
             {
-                _isRunning = false;
-                _thread.Join();
-                _cameraPool.StopLiveView(_cameraInfo);
-                _cameraInfo = null;
+                if (_isRunning)
+                {
+                    _isRunning = false;
+                    _thread.Join();
+                    _cameraPool.StopLiveView(_cameraInfo);
+                    _cameraInfo = null;
+                }
             }
+        }
+
+        public void Pause()
+        {
+            lock (_syncObject)
+            {
+                if (_isRunning)
+                {
+                    _isRunning = false;
+                    _thread.Join();
+                    _cameraPool.StopLiveView(_cameraInfo);
+                }
+            }
+        }
+
+        public void Resume()
+        {
+            _cameraPool.StartLiveView(_cameraInfo, StartWorkerThread);
         }
     }
 }

@@ -14,6 +14,10 @@ using System.Windows.Shapes;
 using Source;
 using EDSDKLib;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.IO;
+using System.Drawing;
+using System.Windows.Interop;
 
 namespace FocusControl
 {
@@ -89,11 +93,13 @@ namespace FocusControl
 
         private void MoveFocus(uint howMuch)
         {
+            _lvThread.Pause();
             foreach (Object o in listBox1.ItemsSource)
             {
                 ICameraInfo cameraInfo = (ICameraInfo)o;
                 _cameraPool.MoveFocus(cameraInfo, howMuch);
             }
+            _lvThread.Resume();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -142,22 +148,77 @@ namespace FocusControl
         private void buttonAttach_Click(object sender, RoutedEventArgs e)
         {
             IsInLiveView = true;
-
+            StartLiveView();
         }
 
         private void buttonRelease_Click(object sender, RoutedEventArgs e)
         {
             IsInLiveView = false;
+            StopLiveView();
         }
 
         private void OnImageRecieved(IntPtr pointer, uint size)
         {
+            //Dispatcher.BeginInvoke((Action)(() =>
+            //{
+            //    Byte[] data = new byte[size];
+            //    Marshal.Copy(pointer, data, 0, (int)size);
+            //    MemoryStream memStream = new MemoryStream(data);
+
+
+            //    Bitmap bitmap = new Bitmap(memStream);
+            //    BitmapSource image = Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromWidthAndHeight((int)liveImage.Width, (int)liveImage.Height));
+                
+
+            //    liveImage.Source = image; // CreateResizedImage(image, (int)liveImage.Width, (int)liveImage.Height);
+            //}));
+        }
+
+
+        ImageSource CreateResizedImage(ImageSource source, int width, int height)
+        {
+            // Target Rect for the resize operation
+            Rect rect = new Rect(0, 0, width, height);
+
+            // Create a DrawingVisual/Context to render with
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                drawingContext.DrawImage(source, rect);
+            }
+
+            // Use RenderTargetBitmap to resize the original image
+            RenderTargetBitmap resizedImage = new RenderTargetBitmap(
+                (int)rect.Width, (int)rect.Height,  // Resized dimensions
+                96, 96,                             // Default DPI values
+                PixelFormats.Default);              // Default pixel format
+            resizedImage.Render(drawingVisual);
+
+            // Return the resized image
+            return resizedImage;
         }
 
         private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (IsInLiveView)
+            {
+                SelectedCamera = (ICameraInfo)listBox1.SelectedItem;
+                StartLiveView();
+            }
+        }
+
+        private void StartLiveView()
+        {
             _lvThread.Stop();
-            _lvThread.Start(SelectedCamera);
+            if (SelectedCamera != null)
+            {
+                _lvThread.Start(SelectedCamera);
+            }
+        }
+
+        private void StopLiveView()
+        {
+            _lvThread.Stop();
         }
     }
 }
