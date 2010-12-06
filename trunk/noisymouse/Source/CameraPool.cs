@@ -16,7 +16,7 @@ namespace Source
 
         void StartLiveView(ICameraInfo cameraInfo, Action<uint> onSwitched);
         void MoveFocus(ICameraInfo cameraInfo, uint value);
-        void StopLiveView(ICameraInfo cameraInfo);
+        void StopLiveView(ICameraInfo cameraInfo, Action<uint> whenReady);
 
         void LockUI(ICameraInfo cameraInfo);
         void UnlockUI(ICameraInfo cameraInfo);
@@ -146,9 +146,9 @@ namespace Source
             }));
         }
 
-        public void StopLiveView(ICameraInfo cameraInfo)
+        public void StopLiveView(ICameraInfo cameraInfo, Action<uint> whenReady)
         {
-            GetCameraProcessor(cameraInfo).Camera.StopLiveView();
+            GetCameraProcessor(cameraInfo).Camera.StopLiveView(whenReady);
         }
 
 

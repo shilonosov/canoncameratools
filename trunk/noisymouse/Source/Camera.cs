@@ -50,7 +50,7 @@ namespace Source
         void KeepALive();
 
         void StartLiveView(Action<uint> whenReady);
-        void StopLiveView();
+        void StopLiveView(Action<uint> whenReady);
         void MoveFocus(uint value);
 
         void DownloadLiveViewImage(Action<IntPtr, uint> onImageRecieved);
@@ -378,9 +378,8 @@ namespace Source
                 SetProperty(EDSDK.PropID_Evf_Mode, 1);
             }
 
-            SetProperty(EDSDK.PropID_Evf_OutputDevice, device);
-
             AddEventHandler(whenReady, true, EDSDK.PropID_Evf_OutputDevice);
+            SetProperty(EDSDK.PropID_Evf_OutputDevice, device);
         }
 
         private void AddEventHandler(Action<uint> action, bool runOnce, uint eventId)
@@ -391,12 +390,14 @@ namespace Source
             }
         }
 
-        public void StopLiveView()
+        public void StopLiveView(Action<uint> whenReady)
         {
             UInt32 device = Convert.ToUInt32(GetIntProperty(EDSDK.PropID_Evf_OutputDevice));
-            device = EDSDK.EvfOutputDevice_TFT;
+            device = 0;
 
             _cameraNotifications.Log(string.Format("LiveView device: {0}", device));
+
+            AddEventHandler(whenReady, true, EDSDK.PropID_Evf_OutputDevice);
             SetProperty(EDSDK.PropID_Evf_OutputDevice, device);
         }
 
