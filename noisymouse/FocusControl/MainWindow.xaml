@@ -23,7 +23,7 @@
             </StackPanel>
         </DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="5,5,5,5">
-            <Image Height="290" Name="liveImage" Stretch="Fill" Width="600" />
+            <Image Height="290" Name="liveImage" Stretch="Fill" Width="600" Source="{Binding Source=root, Path=LiveViewImage, Mode=OneWay}"/>
         </StackPanel>
         <GroupBox IsEnabled="{Binding ElementName=root, Path=IsInLiveView, UpdateSourceTrigger=PropertyChanged}">
             <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" HorizontalAlignment="Center"  Height="66" Orientation="Vertical" Width="255">

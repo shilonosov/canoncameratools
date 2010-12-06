@@ -36,6 +36,7 @@ namespace Source
 
         protected void LoopFunction()
         {
+            Thread.Sleep(10);
             _cameraPool.DownloadLiveViewImage(_cameraInfo, _onImageRecieved);
         }
 
@@ -54,6 +55,8 @@ namespace Source
             }
         }
 
+        private void Foo(uint foo) { }
+
         public void Stop()
         {
             lock (_syncObject)
@@ -62,13 +65,13 @@ namespace Source
                 {
                     _isRunning = false;
                     _thread.Join();
-                    _cameraPool.StopLiveView(_cameraInfo);
+                    _cameraPool.StopLiveView(_cameraInfo, Foo);
                     _cameraInfo = null;
                 }
             }
         }
 
-        public void Pause()
+        public void Pause(Action<uint> whenReady)
         {
             lock (_syncObject)
             {
@@ -76,7 +79,7 @@ namespace Source
                 {
                     _isRunning = false;
                     _thread.Join();
-                    _cameraPool.StopLiveView(_cameraInfo);
+                    _cameraPool.StopLiveView(_cameraInfo, whenReady);
                 }
             }
         }

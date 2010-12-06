@@ -132,7 +132,7 @@ namespace MultifocusShooter
                     steps--;
                 }
 
-                _cameraPool.StopLiveView(CameraInfo);
+                //_cameraPool.StopLiveView(CameraInfo);
             }));
         }
 

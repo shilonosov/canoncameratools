@@ -30,6 +30,7 @@ namespace FocusControl
         private ICameraInfo _selectedCamera;
         private bool _isInLiveView;
         private LiveViewThread _lvThread;
+        
 
         #region INotifyPropertyChanged
 
@@ -42,6 +43,8 @@ namespace FocusControl
         }
 
         #endregion
+
+        public ImageSource LiveViewImage { get; private set; }
 
         public bool IsInLiveView
         {
@@ -93,13 +96,18 @@ namespace FocusControl
 
         private void MoveFocus(uint howMuch)
         {
-            _lvThread.Pause();
+            //_lvThread.Pause((code)=>DoMoveFocus(howMuch));
+            DoMoveFocus(howMuch);
+        }
+
+        private void DoMoveFocus(uint howMuch)
+        {
             foreach (Object o in listBox1.ItemsSource)
             {
                 ICameraInfo cameraInfo = (ICameraInfo)o;
                 _cameraPool.MoveFocus(cameraInfo, howMuch);
             }
-            _lvThread.Resume();
+            //_lvThread.Resume();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -148,7 +156,7 @@ namespace FocusControl
         private void buttonAttach_Click(object sender, RoutedEventArgs e)
         {
             IsInLiveView = true;
-            StartLiveView();
+            LiveViewCameraChanged((ICameraInfo)listBox1.SelectedItem);
         }
 
         private void buttonRelease_Click(object sender, RoutedEventArgs e)
@@ -161,16 +169,17 @@ namespace FocusControl
         {
             //Dispatcher.BeginInvoke((Action)(() =>
             //{
-            //    Byte[] data = new byte[size];
-            //    Marshal.Copy(pointer, data, 0, (int)size);
-            //    MemoryStream memStream = new MemoryStream(data);
+                Byte[] data = new byte[size];
+                Marshal.Copy(pointer, data, 0, (int)size);
+                MemoryStream memStream = new MemoryStream(data);
 
+                BitmapFrame frame = BitmapFrame.Create(memStream, BitmapCreateOptions.IgnoreImageCache, BitmapCacheOption.None);
 
-            //    Bitmap bitmap = new Bitmap(memStream);
-            //    BitmapSource image = Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromWidthAndHeight((int)liveImage.Width, (int)liveImage.Height));
-                
+                LiveViewImage = frame;
+                NotifyPropertyChanged("LiveViewImage");
 
-            //    liveImage.Source = image; // CreateResizedImage(image, (int)liveImage.Width, (int)liveImage.Height);
+                //var h_bm = new Bitmap(memStream).GetHbitmap();
+                //liveImage.Source = Imaging.CreateBitmapSourceFromHBitmap(h_bm, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             //}));
         }
 
@@ -200,9 +209,14 @@ namespace FocusControl
 
         private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            LiveViewCameraChanged((ICameraInfo)listBox1.SelectedItem);
+        }
+
+        private void LiveViewCameraChanged(ICameraInfo cameraInfo)
+        {
             if (IsInLiveView)
             {
-                SelectedCamera = (ICameraInfo)listBox1.SelectedItem;
+                SelectedCamera = cameraInfo;
                 StartLiveView();
             }
         }
