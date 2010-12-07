@@ -79,6 +79,7 @@ namespace FocusControl
 
         public MainWindow()
         {
+            this.DataContext = this;
             _cameraPool = new CameraPool(this, Dispatcher);
             _lvThread = new LiveViewThread(_cameraPool, OnImageRecieved);
             InitializeComponent();
@@ -165,22 +166,13 @@ namespace FocusControl
             StopLiveView();
         }
 
-        private void OnImageRecieved(IntPtr pointer, uint size)
+        private void OnImageRecieved(MemoryStream memoryStream, uint size)
         {
-            //Dispatcher.BeginInvoke((Action)(() =>
-            //{
-                Byte[] data = new byte[size];
-                Marshal.Copy(pointer, data, 0, (int)size);
-                MemoryStream memStream = new MemoryStream(data);
-
-                BitmapFrame frame = BitmapFrame.Create(memStream, BitmapCreateOptions.IgnoreImageCache, BitmapCacheOption.None);
-
-                LiveViewImage = frame;
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                LiveViewImage = BitmapFrame.Create(memoryStream, BitmapCreateOptions.IgnoreImageCache, BitmapCacheOption.None);
                 NotifyPropertyChanged("LiveViewImage");
-
-                //var h_bm = new Bitmap(memStream).GetHbitmap();
-                //liveImage.Source = Imaging.CreateBitmapSourceFromHBitmap(h_bm, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            //}));
+            }));
         }
 
 

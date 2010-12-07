@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using EDSDKLib;
+using System.IO;
 
 namespace Source
 {
@@ -14,9 +15,9 @@ namespace Source
         private bool _isRunning;
         private Thread _thread;
         private object _syncObject;
-        private Action<IntPtr, uint> _onImageRecieved;
+        private Action<MemoryStream, uint> _onImageRecieved;
 
-        public LiveViewThread(ICameraPool cameraPool, Action<IntPtr, uint> onImageRecieved)
+        public LiveViewThread(ICameraPool cameraPool, Action<MemoryStream, uint> onImageRecieved)
         {
             _cameraPool = cameraPool;
             _onImageRecieved = onImageRecieved;
