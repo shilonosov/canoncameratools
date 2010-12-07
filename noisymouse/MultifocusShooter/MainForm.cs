@@ -38,14 +38,9 @@ namespace MultifocusShooter
             _liveViewThread = new LiveViewThread(_cameraPool, OnImageRecieved);
         }
 
-        protected void OnImageRecieved(IntPtr imagePointer, uint size)
+        protected void OnImageRecieved(MemoryStream memoryStream, uint size)
         {
-            Byte[] data = new byte[size];
-            Marshal.Copy(imagePointer, data, 0, (int)size);
-            MemoryStream memStream = new MemoryStream(data);
-
-
-            Bitmap bitmap = new Bitmap(memStream);
+            Bitmap bitmap = new Bitmap(memoryStream);
             Bitmap resized = new Bitmap(bitmap, pictureBox.Size);
 
             pictureBox.Image = resized;

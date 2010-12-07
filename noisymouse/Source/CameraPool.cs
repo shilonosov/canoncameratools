@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EDSDKLib;
 using System.Windows.Threading;
+using System.IO;
 
 namespace Source
 {
@@ -25,7 +26,7 @@ namespace Source
 
         void SetFlashMode(ICameraInfo cameraInfo, int mode);
 
-        void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<IntPtr, uint> onImageRecieved);
+        void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<MemoryStream, uint> onImageRecieved);
 
         void StartListenTakeImage(ICameraInfo cameraInfo, IImageHandler imageHandler);
         void StopListenTakeImage(ICameraInfo cameraInfo);
@@ -172,7 +173,7 @@ namespace Source
             GetCameraProcessor(cameraInfo).Camera.SetProperty(EDSDK.PropID_FlashMode, mode);
         }
 
-        public void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<IntPtr, uint> onImageRecieved)
+        public void DownloadLiveViewImage(ICameraInfo cameraInfo, Action<MemoryStream, uint> onImageRecieved)
         {
             GetCameraProcessor(cameraInfo).Camera.DownloadLiveViewImage(onImageRecieved);
         }

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using EDSDKLib;
 using Source.Utils;
+using System.Runtime.InteropServices;
 
 
 namespace Source
@@ -53,7 +54,7 @@ namespace Source
         void StopLiveView(Action<uint> whenReady);
         void MoveFocus(uint value);
 
-        void DownloadLiveViewImage(Action<IntPtr, uint> onImageRecieved);
+        void DownloadLiveViewImage(Action<MemoryStream, uint> onImageRecieved);
         void SetDownloadImageHandler(IImageHandler imageHandler);
     }
 
@@ -418,7 +419,7 @@ namespace Source
         }
 
 
-        public void DownloadLiveViewImage(Action<IntPtr, uint> onImageRecieved)
+        public void DownloadLiveViewImage(Action<MemoryStream, uint> onImageRecieved)
         {
             IntPtr stream = IntPtr.Zero;
             IntPtr image = IntPtr.Zero;
@@ -434,7 +435,7 @@ namespace Source
                 SDKHelper.CheckError(EDSDK.EdsGetPointer(stream, out pointer));
                 SDKHelper.CheckError(EDSDK.EdsGetLength(stream, out size));
 
-                onImageRecieved(pointer, size);
+                onImageRecieved(CopyToMemoryStream(pointer, size), size);
 
                 SDKHelper.CheckError(EDSDK.EdsRelease(image));
                 SDKHelper.CheckError(EDSDK.EdsRelease(stream));
@@ -442,6 +443,14 @@ namespace Source
             catch (SDKComeBackLaterException)
             {
             }
+        }
+
+        private static MemoryStream CopyToMemoryStream(IntPtr pointer, uint size)
+        {
+            Byte[] data = new byte[size];
+            Marshal.Copy(pointer, data, 0, (int)size);
+            MemoryStream memStream = new MemoryStream(data);
+            return memStream;
         }
 
         public void SetDownloadImageHandler(IImageHandler imageHandler)
