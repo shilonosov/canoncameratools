@@ -16,7 +16,7 @@ namespace Source
         void PressShutterButton(ICameraInfo cameraInfo, IImageHandler _imageHandler);
 
         void StartLiveView(ICameraInfo cameraInfo, Action<uint> onSwitched);
-        void MoveFocus(ICameraInfo cameraInfo, uint value);
+        void MoveFocus(ICameraInfo cameraInfo, uint value, Action afterMove);
         void StopLiveView(ICameraInfo cameraInfo, Action<uint> whenReady);
 
         void LockUI(ICameraInfo cameraInfo);
@@ -139,11 +139,12 @@ namespace Source
             GetCameraProcessor(cameraInfo).Camera.StartLiveView(onSwitched);
         }
 
-        public void MoveFocus(ICameraInfo cameraInfo, uint value)
+        public void MoveFocus(ICameraInfo cameraInfo, uint value, Action afterMove)
         {
             _dispatcher.BeginInvoke((Action)(() =>
             {
                 GetCameraProcessor(cameraInfo).Camera.MoveFocus(value);
+                afterMove();
             }));
         }
 
