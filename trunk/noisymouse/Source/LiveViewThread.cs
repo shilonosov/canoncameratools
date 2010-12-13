@@ -23,7 +23,7 @@ namespace Source
             _onImageRecieved = onImageRecieved;
             _cameraInfo = null;
             _isRunning = false;
-            _thread = new Thread(Worker);
+            _thread = null;
             _syncObject = new object();
         }
 
@@ -52,6 +52,7 @@ namespace Source
             lock (_syncObject)
             {
                 _isRunning = true;
+                _thread = new Thread(Worker);
                 _thread.Start();
             }
         }
@@ -66,8 +67,13 @@ namespace Source
                 {
                     _isRunning = false;
                     _thread.Join();
+                    _thread = null;
                     _cameraPool.StopLiveView(_cameraInfo, Foo);
                     _cameraInfo = null;
+                }
+                else
+                {
+                    Thread.Sleep(500);
                 }
             }
         }
@@ -80,14 +86,16 @@ namespace Source
                 {
                     _isRunning = false;
                     _thread.Join();
-                    _cameraPool.StopLiveView(_cameraInfo, whenReady);
+                    _thread = null;
+                    //_cameraPool.StopLiveView(_cameraInfo, whenReady);
                 }
             }
         }
 
         public void Resume()
         {
-            _cameraPool.StartLiveView(_cameraInfo, StartWorkerThread);
+            this.StartWorkerThread(0);
+            //_cameraPool.StartLiveView(_cameraInfo, StartWorkerThread);
         }
     }
 }

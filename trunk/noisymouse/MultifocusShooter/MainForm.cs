@@ -135,7 +135,7 @@ namespace MultifocusShooter
         {
             for (int j = 0; j < multiplierNumericUpDown.Value; ++j)
             {
-                _cameraPool.MoveFocus(CurrentImage.CameraInfo, this.GetSpeed());
+                _cameraPool.MoveFocus(CurrentImage.CameraInfo, this.GetSpeed(), () => { });
             }
         }
 

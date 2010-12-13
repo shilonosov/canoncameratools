@@ -97,7 +97,7 @@ namespace FocusControl
 
         private void MoveFocus(uint howMuch)
         {
-            //_lvThread.Pause((code)=>DoMoveFocus(howMuch));
+            _lvThread.Pause((code)=>DoMoveFocus(howMuch));
             DoMoveFocus(howMuch);
         }
 
@@ -106,9 +106,21 @@ namespace FocusControl
             foreach (Object o in listBox1.ItemsSource)
             {
                 ICameraInfo cameraInfo = (ICameraInfo)o;
-                _cameraPool.MoveFocus(cameraInfo, howMuch);
+                _cameraPool.MoveFocus(cameraInfo, howMuch, ResumeLiveViewAfter(listBox1.Items.Count));
             }
-            //_lvThread.Resume();
+        }
+
+        private Action ResumeLiveViewAfter(int p)
+        {
+            int attempts = p;
+            return () =>
+            {
+                attempts--;
+                if (attempts == 0)
+                {
+                    _lvThread.Resume();
+                }
+            };
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -225,6 +237,12 @@ namespace FocusControl
         private void StopLiveView()
         {
             _lvThread.Stop();
+        }
+
+        private void root_Closing(object sender, CancelEventArgs e)
+        {
+            StopLiveView();
+            _cameraPool.Dispose();
         }
     }
 }

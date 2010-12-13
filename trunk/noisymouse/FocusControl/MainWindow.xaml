@@ -10,7 +10,7 @@
         d:DesignWidth="848"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
-        x:Name="root">
+        x:Name="root" Closing="root_Closing">
     <Window.Resources>
         <thisProject:InverseBooleanConverter x:Key="inverseBooleanConverter"/>
     </Window.Resources>    
